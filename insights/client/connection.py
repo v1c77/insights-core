@@ -26,7 +26,8 @@ except ImportError:
 from .utilities import (determine_hostname,
                         generate_machine_id,
                         write_unregistered_file,
-                        write_registered_file)
+                        write_registered_file,
+                        determine_client_invocation)
 from .cert_auth import rhsmCertificate
 from .constants import InsightsConstants as constants
 from .url_cache import URLCache
@@ -186,6 +187,8 @@ class InsightsConnection(object):
         if pkg is not None:
             client_version = "%s/%s" % (pkg.project_name, pkg.version)
 
+        invocation = determine_client_invocation()
+
         requests_version = None
         pkg = pkg_resources.working_set.find(pkg_resources.Requirement.parse("requests"))
         if pkg is not None:
@@ -216,9 +219,10 @@ class InsightsConnection(object):
                 logger.warning("Failed to detect OS version: %s", e)
         kernel_version = "%s %s" % (platform.system(), platform.release())
 
-        ua = "{client_version} ({core_version}; {requests_version}) {os_family} {os_release} ({python_version}; {kernel_version})".format(
+        ua = "{client_version} ({core_version}; {invocation}; {requests_version}) {os_family} {os_release} ({python_version}; {kernel_version})".format(
             client_version=client_version,
             core_version=core_version,
+            invocation=invocation,
             python_version=python_version,
             os_family=os_family,
             os_release=os_release,
