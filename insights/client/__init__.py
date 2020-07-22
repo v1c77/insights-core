@@ -20,7 +20,8 @@ from .utilities import (delete_registered_file,
                         generate_machine_id,
                         get_tags,
                         write_tags,
-                        migrate_tags)
+                        migrate_tags,
+                        determine_client_invocation)
 
 NETWORK = constants.custom_network_log_level
 logger = logging.getLogger(__name__)
@@ -57,6 +58,7 @@ class InsightsClient(object):
         else:
             # write PID to file in case we need to ping systemd
             write_to_disk(constants.pidfile, content=str(os.getpid()))
+            write_to_disk(constants.ppidfile, content=determine_client_invocation())
         # setup insights connection placeholder
         # used for requests
         self.session = None

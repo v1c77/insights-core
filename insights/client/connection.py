@@ -187,7 +187,8 @@ class InsightsConnection(object):
         if pkg is not None:
             client_version = "%s/%s" % (pkg.project_name, pkg.version)
 
-        invocation = determine_client_invocation()
+        with open(constants.ppidfile, 'r') as f:
+            invocation = f.read()
 
         requests_version = None
         pkg = pkg_resources.working_set.find(pkg_resources.Requirement.parse("requests"))
@@ -229,6 +230,7 @@ class InsightsConnection(object):
             kernel_version=kernel_version,
             requests_version=requests_version,
         )
+        logger.log(NETWORK, "User-agent: %s", ua)
 
         return ua
 
