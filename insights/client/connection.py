@@ -220,7 +220,7 @@ class InsightsConnection(object):
                 logger.warning("Failed to detect OS version: %s", e)
         kernel_version = "%s %s" % (platform.system(), platform.release())
 
-        ua = "{client_version} ({core_version}; {invocation}; {requests_version}) {os_family} {os_release} ({python_version}; {kernel_version})".format(
+        ua = "{client_version} ({core_version}; {requests_version}) {os_family} {os_release} ({python_version}; {kernel_version}); {invocation}".format(
             client_version=client_version,
             core_version=core_version,
             invocation=invocation,
@@ -230,7 +230,6 @@ class InsightsConnection(object):
             kernel_version=kernel_version,
             requests_version=requests_version,
         )
-        logger.log(NETWORK, "User-agent: %s", ua)
 
         return ua
 
