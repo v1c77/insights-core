@@ -26,8 +26,7 @@ except ImportError:
 from .utilities import (determine_hostname,
                         generate_machine_id,
                         write_unregistered_file,
-                        write_registered_file,
-                        determine_client_invocation)
+                        write_registered_file)
 from .cert_auth import rhsmCertificate
 from .constants import InsightsConstants as constants
 from .url_cache import URLCache
