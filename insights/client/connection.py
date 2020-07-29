@@ -26,8 +26,7 @@ except ImportError:
 from .utilities import (determine_hostname,
                         generate_machine_id,
                         write_unregistered_file,
-                        write_registered_file,
-                        determine_client_invocation)
+                        write_registered_file)
 from .cert_auth import rhsmCertificate
 from .constants import InsightsConstants as constants
 from .url_cache import URLCache
@@ -187,8 +186,11 @@ class InsightsConnection(object):
         if pkg is not None:
             client_version = "%s/%s" % (pkg.project_name, pkg.version)
 
-        with open(constants.ppidfile, 'r') as f:
-            invocation = f.read()
+        if os.path.isfile(constants.ppidfile):
+            with open(constants.ppidfile, 'r') as f:
+                parent_process = f.read()
+        else:
+            parent_process = "unknown"
 
         requests_version = None
         pkg = pkg_resources.working_set.find(pkg_resources.Requirement.parse("requests"))
@@ -220,10 +222,10 @@ class InsightsConnection(object):
                 logger.warning("Failed to detect OS version: %s", e)
         kernel_version = "%s %s" % (platform.system(), platform.release())
 
-        ua = "{client_version} ({core_version}; {requests_version}) {os_family} {os_release} ({python_version}; {kernel_version}); {invocation}".format(
+        ua = "{client_version} ({core_version}; {requests_version}) {os_family} {os_release} ({python_version}; {kernel_version}); {parent_process}".format(
             client_version=client_version,
             core_version=core_version,
-            invocation=invocation,
+            parent_process=parent_process,
             python_version=python_version,
             os_family=os_family,
             os_release=os_release,

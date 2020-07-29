@@ -398,9 +398,9 @@ def migrate_tags():
             logger.error(e)
 
 
-def determine_client_invocation():
+def get_parent_process():
     '''
-    Determine how the client was executed
+    Get parent process of the client
 
     Returns: string
     '''
@@ -410,4 +410,4 @@ def determine_client_invocation():
         name = output['output'].splitlines()[0].split('\t')[1]
         return name
     else:
-        return "unidentified"
+        return "unknown"
